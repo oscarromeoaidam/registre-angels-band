@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ $title ?? "Angel’s Band — Registre" }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <div class="max-w-6xl mx-auto p-6">
+    <div class="flex items-center justify-between gap-4">
+      <a href="{{ route('instrumentists.index') }}" class="text-xl font-bold">
+        Angel’s Band — Registre
+      </a>
+      <div class="flex items-center gap-2">
+        <a class="px-4 py-2 rounded bg-white border hover:bg-gray-100" href="{{ route('instrumentists.index') }}">
+          Liste
+        </a>
+        <a class="px-4 py-2 rounded bg-black text-white" href="{{ route('instrumentists.create') }}">
+          + Ajouter
+        </a>
+      </div>
+    </div>
+
+    @if (session('success'))
+      <div class="mt-4 p-3 rounded border bg-green-50 text-green-800">
+        {{ session('success') }}
+      </div>
+    @endif
+
+    @if ($errors->any())
+      <div class="mt-4 p-3 rounded border bg-red-50 text-red-800">
+        <div class="font-semibold mb-2">Erreurs :</div>
+        <ul class="list-disc ml-5">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
+    <div class="mt-6">
+      {{ $slot }}
+    </div>
+  </div>
+</body>
+</html>
