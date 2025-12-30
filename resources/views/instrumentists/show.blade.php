@@ -62,6 +62,44 @@
             </form>
           </div>
         </div>
+@php
+  $role = $instrumentist->role->name ?? 'Instrumentiste';
+
+  $key = mb_strtolower(trim($role));
+  $key = str_replace(
+    ['é','è','ê','ë','à','â','î','ï','ô','ö','ù','û'],
+    ['e','e','e','e','a','a','i','i','o','o','u','u'],
+    $key
+  );
+
+  $roleColors = [
+    'president' => 'bg-amber-600 text-white',
+    'dt' => 'bg-blue-600 text-white',
+    'dt adjoint' => 'bg-indigo-600 text-white',
+    'dt alto' => 'bg-purple-600 text-white',
+    'dt soprano' => 'bg-pink-600 text-white',
+    'dt tenor' => 'bg-cyan-600 text-white',
+    'dt basse' => 'bg-slate-700 text-white',
+    'organisateur' => 'bg-emerald-600 text-white',
+    'secretaire' => 'bg-orange-600 text-white',
+    'tresoriere' => 'bg-green-600 text-white',
+    'charge spirituel' => 'bg-rose-600 text-white',
+  ];
+
+  $badgeClass = $roleColors[$key] ?? 'bg-gray-600 text-white';
+@endphp
+
+<div class="flex items-center gap-2 flex-wrap mt-2">
+  @if($key !== 'instrumentiste')
+    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold {{ $badgeClass }}">
+      {{ $role }}
+    </span>
+  @else
+    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs bg-white border text-gray-700">
+      Instrumentiste
+    </span>
+  @endif
+</div>
 
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="p-4 rounded border bg-gray-50">

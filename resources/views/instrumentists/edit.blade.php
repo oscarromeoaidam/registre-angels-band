@@ -28,6 +28,19 @@
         <label class="block text-sm font-medium mb-1">Prénoms</label>
         <input name="first_name" value="{{ old('first_name', $instrumentist->first_name) }}" class="w-full p-3 border rounded" required>
       </div>
+<div>
+  <label class="block text-sm font-medium mb-1">Rôle</label>
+  <select name="role_id" class="w-full p-3 border rounded" required>
+    <option value="">— Choisir —</option>
+    @foreach($roles as $r)
+      <option value="{{ $r->id }}"
+        @selected((int)old('role_id', $instrumentist->role_id ?? '') === (int)$r->id)>
+        {{ $r->name }}
+      </option>
+    @endforeach
+  </select>
+</div>
+
 
       <div>
         <label class="block text-sm font-medium mb-1">Surnom</label>

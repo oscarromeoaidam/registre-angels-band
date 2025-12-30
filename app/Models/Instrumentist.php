@@ -9,7 +9,7 @@ class Instrumentist extends Model
 {
     protected $fillable = [
         'photo_path','first_name','last_name','nickname',
-        'sex','birth_date','residence','phone','instrument_id'
+        'sex','birth_date','residence','phone','instrument_id','role_id'
     ];
 
     protected $casts = [
@@ -20,6 +20,11 @@ class Instrumentist extends Model
     {
         return $this->belongsTo(Instrument::class);
     }
+    public function role()
+{
+    return $this->belongsTo(\App\Models\Role::class);
+}
+
 
     // Âge calculé (ne pas stocker en DB)
     public function getAgeAttribute(): int

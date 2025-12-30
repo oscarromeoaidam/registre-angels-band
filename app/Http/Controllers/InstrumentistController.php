@@ -5,44 +5,89 @@ namespace App\Http\Controllers;
 use App\Models\Instrument;
 use App\Models\Instrumentist;
 use Illuminate\Http\Request;
+use App\Models\Role;
 use Illuminate\Support\Facades\Storage;
 
 class InstrumentistController extends Controller
 {
+    private const ROLES = [
+    'Président',
+    'DT principal',
+    'DT Adjoint',
+    'DT Alto',
+    'DT Soprano',
+    'DT tenor',
+    'DT basse',
+    'Organisateur',
+    'Secretaire',
+    'trésoriere',
+    'chargé spirituel',
+    'Instrumentiste',
+];
+
     public function index(Request $request)
-    {
-        $q = $request->string('q')->toString();
-        $category = $request->string('category')->toString();
+{
+    $q = $request->string('q')->toString();
 
-        $instrumentists = Instrumentist::query()
-            ->with(['instruments']) // many-to-many
-            ->when($q, function ($query) use ($q) {
-                $query->where(function ($sub) use ($q) {
-                    $sub->where('first_name', 'like', "%$q%")
-                        ->orWhere('last_name', 'like', "%$q%")
-                        ->orWhere('nickname', 'like', "%$q%")
-                        ->orWhere('phone', 'like', "%$q%");
-                });
+    // Ordre souhaité des rôles (Instrumentiste à la fin)
+    $roleOrder = [
+        'Président',
+        'DT principal',
+        'DT Adjoint',
+        'DT Alto',
+        'DT Soprano',
+        'DT tenor',
+        'DT basse',
+        'Organisateur',
+        'Secretaire',
+        'trésoriere',
+        'chargé spirituel',
+        'Instrumentiste',
+    ];
+
+    $orderSql = "FIELD(roles.name, '" . implode("','", $roleOrder) . "')";
+
+    $instrumentists = Instrumentist::query()
+        ->with(['instruments', 'role'])
+        // join roles pour pouvoir trier dessus
+        ->leftJoin('roles', 'roles.id', '=', 'instrumentists.role_id')
+        ->select('instrumentists.*') // IMPORTANT sinon collision de colonnes
+
+        ->when($q, function ($query) use ($q) {
+            $query->where(function ($sub) use ($q) {
+                $sub->where('instrumentists.first_name', 'like', "%$q%")
+                    ->orWhere('instrumentists.last_name', 'like', "%$q%")
+                    ->orWhere('instrumentists.nickname', 'like', "%$q%")
+                    ->orWhere('instrumentists.phone', 'like', "%$q%")
+                    ->orWhere('roles.name', 'like', "%$q%");
             })
-            ->when($category, function ($query) use ($category) {
-                // IMPORTANT: instruments (pas instrument)
-                $query->whereHas('instruments', function ($q) use ($category) {
-                    $q->where('category', $category);
-                });
-            })
-            ->latest()
-            ->paginate(12)
-            ->withQueryString();
+            // recherche aussi dans les instruments
+            ->orWhereHas('instruments', function ($iq) use ($q) {
+                $iq->where('name', 'like', "%$q%")
+                   ->orWhere('category', 'like', "%$q%");
+            });
+        })
 
-        return view('instrumentists.index', compact('instrumentists', 'q', 'category'));
-    }
+        // ✅ TRI : rôles d’abord, instrumentiste en dernier
+        ->orderByRaw($orderSql)
+        ->orderBy('instrumentists.last_name')
+        ->orderBy('instrumentists.first_name')
 
-    public function create()
-    {
-        return view('instrumentists.create', [
-            'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
-        ]);
-    }
+        ->paginate(12)
+        ->withQueryString();
+
+    return view('instrumentists.index', compact('instrumentists', 'q'));
+}
+
+
+public function create()
+{
+    return view('instrumentists.create', [
+        'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
+        'roles' => Role::orderBy('name')->get(),
+    ]);
+}
+
 
     public function store(Request $request)
     {
@@ -55,6 +100,7 @@ class InstrumentistController extends Controller
             'birth_date' => ['required', 'date'],
             'residence' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:30'],
+'role_id' => ['required','integer','exists:roles,id'],
 
             // ✅ multiple instruments
             'instrument_ids' => ['required', 'array', 'min:1', 'max:10'],
@@ -97,15 +143,18 @@ class InstrumentistController extends Controller
         return view('instrumentists.show', compact('instrumentist'));
     }
 
-    public function edit(Instrumentist $instrumentist)
-    {
-        $instrumentist->load('instruments');
+public function edit(Instrumentist $instrumentist)
+{
+    $instrumentist->load('instruments','role');
 
-        return view('instrumentists.edit', [
-            'instrumentist' => $instrumentist,
-            'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
-        ]);
-    }
+    return view('instrumentists.edit', [
+        'instrumentist' => $instrumentist,
+        'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
+        'roles' => \App\Models\Role::orderBy('name')->get(),
+    ]);
+}
+
+
 
     public function update(Request $request, Instrumentist $instrumentist)
     {
@@ -118,6 +167,7 @@ class InstrumentistController extends Controller
             'birth_date' => ['required', 'date'],
             'residence' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:30'],
+'role_id' => ['required','integer','exists:roles,id'],
 
             // ✅ multiple instruments
             'instrument_ids' => ['required', 'array', 'min:1', 'max:10'],
@@ -137,8 +187,9 @@ class InstrumentistController extends Controller
 
         // ✅ update fields (sans photo + instruments)
         $instrumentist->fill(
-            collect($data)->except(['photo', 'instrument_ids', 'primary_instrument_id'])->all()
-        )->save();
+  collect($data)->except(['photo','instrument_ids','primary_instrument_id'])->all()
+)->save();
+
 
         // ✅ sync instruments
         $ids = $data['instrument_ids'];
