@@ -50,17 +50,22 @@
 </p>
           </div>
 
-          <div class="flex gap-2">
-            <a class="px-4 py-2 rounded bg-white border"
-               href="{{ route('instrumentists.edit', $instrumentist) }}">Modifier</a>
+          @auth
+  @if(auth()->user()->is_admin)
+    <div class="flex gap-2">
+      <a class="px-4 py-2 rounded bg-white border"
+         href="{{ route('instrumentists.edit', $instrumentist) }}">Modifier</a>
 
-            <form method="POST" action="{{ route('instrumentists.destroy', $instrumentist) }}"
-                  onsubmit="return confirm('Supprimer cet instrumentiste ?');">
-              @csrf
-              @method('DELETE')
-              <button class="px-4 py-2 rounded bg-red-600 text-white">Supprimer</button>
-            </form>
-          </div>
+      <form method="POST" action="{{ route('instrumentists.destroy', $instrumentist) }}"
+            onsubmit="return confirm('Supprimer cet instrumentiste ?');">
+        @csrf
+        @method('DELETE')
+        <button class="px-4 py-2 rounded bg-red-600 text-white">Supprimer</button>
+      </form>
+    </div>
+  @endif
+@endauth
+
         </div>
 @php
   $role = $instrumentist->role->name ?? 'Instrumentiste';

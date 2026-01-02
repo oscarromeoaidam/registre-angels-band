@@ -76,6 +76,7 @@ class InstrumentistController extends Controller
         ->paginate(12)
         ->withQueryString();
 
+        
     return view('instrumentists.index', compact('instrumentists', 'q'));
 }
 

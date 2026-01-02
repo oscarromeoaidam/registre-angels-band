@@ -16,10 +16,23 @@
         <a class="px-4 py-2 rounded bg-white border hover:bg-gray-100" href="{{ route('instrumentists.index') }}">
           Liste
         </a>
-        <a class="px-4 py-2 rounded bg-black text-white" href="{{ route('instrumentists.create') }}">
-          + Ajouter
-        </a>
+        @auth
+  @if(auth()->user()->is_admin)
+    <a class="px-4 py-2 rounded bg-black text-white" href="{{ route('instrumentists.create') }}">
+      + Ajouter
+    </a>
+  @endif
+@endauth
+
       </div>
+      @auth
+  <form method="POST" action="{{ route('logout') }}">
+    @csrf
+    <button class="px-3 py-2 rounded border">Déconnexion</button>
+  </form>
+
+@endauth
+
     </div>
 
     @if (session('success'))
@@ -40,8 +53,7 @@
     @endif
 
     <div class="mt-6">
-      {{ $slot }}
-    </div>
+@yield('content')    </div>
   </div>
 </body>
 </html>

@@ -23,5 +23,8 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call(InstrumentSeeder::class);
 
+         $this->call([
+            AdminUserSeeder::class,
+        ]);
     }
 }

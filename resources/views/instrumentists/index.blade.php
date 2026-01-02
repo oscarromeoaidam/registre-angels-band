@@ -11,14 +11,6 @@
       >
     </form>
 
-    @auth
-      @if(auth()->user()->is_admin)
-        <a href="{{ route('instrumentists.create') }}"
-           class="px-4 py-3 rounded bg-black text-white hover:bg-gray-900">
-          + Ajouter
-        </a>
-      @endif
-    @endauth
   </div>
 
   {{-- Liste --}}
