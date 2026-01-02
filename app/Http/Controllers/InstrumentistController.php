@@ -25,7 +25,7 @@ class InstrumentistController extends Controller
     'Instrumentiste',
 ];
 
-    public function index(Request $request)
+public function index(Request $request)
 {
     $q = $request->string('q')->toString();
 
@@ -49,10 +49,8 @@ class InstrumentistController extends Controller
 
     $instrumentists = Instrumentist::query()
         ->with(['instruments', 'role'])
-        // join roles pour pouvoir trier dessus
         ->leftJoin('roles', 'roles.id', '=', 'instrumentists.role_id')
-        ->select('instrumentists.*') // IMPORTANT sinon collision de colonnes
-
+        ->select('instrumentists.*')
         ->when($q, function ($query) use ($q) {
             $query->where(function ($sub) use ($q) {
                 $sub->where('instrumentists.first_name', 'like', "%$q%")
@@ -61,23 +59,35 @@ class InstrumentistController extends Controller
                     ->orWhere('instrumentists.phone', 'like', "%$q%")
                     ->orWhere('roles.name', 'like', "%$q%");
             })
-            // recherche aussi dans les instruments
             ->orWhereHas('instruments', function ($iq) use ($q) {
                 $iq->where('name', 'like', "%$q%")
                    ->orWhere('category', 'like', "%$q%");
             });
         })
-
-        // ✅ TRI : rôles d’abord, instrumentiste en dernier
         ->orderByRaw($orderSql)
         ->orderBy('instrumentists.last_name')
         ->orderBy('instrumentists.first_name')
-
         ->paginate(12)
         ->withQueryString();
 
-        
-    return view('instrumentists.index', compact('instrumentists', 'q'));
+    // Calcul des KPI
+    $leadershipRoles = ['Président', 'DT principal', 'DT Adjoint', 'Organisateur', 'Secretaire', 'trésoriere', 'chargé spirituel'];
+    $leadershipCount = Instrumentist::whereHas('role', function($q) use ($leadershipRoles) {
+        $q->whereIn('name', $leadershipRoles);
+    })->count();
+
+    $newMembersThisMonth = Instrumentist::whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year)
+        ->count();
+
+    return view('instrumentists.index', array_merge([
+        'instrumentists' => $instrumentists,
+        'q' => $q,
+        'totalMembers' => Instrumentist::count(),
+        'leadershipCount' => $leadershipCount,
+        'uniqueInstruments' => Instrument::distinct('name')->count(),
+        'newMembersThisMonth' => $newMembersThisMonth,
+    ]));
 }
 
 
