@@ -11,26 +11,6 @@ use Illuminate\Support\Facades\Storage;
 class InstrumentistController extends Controller
 {
     private const ROLES = [
-    'Président',
-    'DT principal',
-    'DT Adjoint',
-    'DT Alto',
-    'DT Soprano',
-    'DT tenor',
-    'DT basse',
-    'Organisateur',
-    'Secretaire',
-    'trésoriere',
-    'chargé spirituel',
-    'Instrumentiste',
-];
-
-public function index(Request $request)
-{
-    $q = $request->string('q')->toString();
-
-    // Ordre souhaité des rôles (Instrumentiste à la fin)
-    $roleOrder = [
         'Président',
         'DT principal',
         'DT Adjoint',
@@ -43,62 +23,125 @@ public function index(Request $request)
         'trésoriere',
         'chargé spirituel',
         'Instrumentiste',
+        'Conseiller'
     ];
 
-    $orderSql = "FIELD(roles.name, '" . implode("','", $roleOrder) . "')";
+    public function index(Request $request)
+    {
+        $q = $request->string('q')->toString();
+        $roleFilter = $request->input('role');
+        $sexFilter = $request->input('sex');
+        $instrumentFilter = $request->input('instrument');
+        $perPage = $request->input('per_page', 25);
 
-    $instrumentists = Instrumentist::query()
-        ->with(['instruments', 'role'])
-        ->leftJoin('roles', 'roles.id', '=', 'instrumentists.role_id')
-        ->select('instrumentists.*')
-        ->when($q, function ($query) use ($q) {
-            $query->where(function ($sub) use ($q) {
-                $sub->where('instrumentists.first_name', 'like', "%$q%")
-                    ->orWhere('instrumentists.last_name', 'like', "%$q%")
-                    ->orWhere('instrumentists.nickname', 'like', "%$q%")
-                    ->orWhere('instrumentists.phone', 'like', "%$q%")
-                    ->orWhere('roles.name', 'like', "%$q%");
+        // Ordre souhaité des rôles
+        $roleOrder = [
+            'Président',
+            'DT principal',
+            'DT Adjoint',
+            'Organisateur',
+            'Secretaire',
+            'trésoriere',
+            'Conseiller',
+            'chargé spirituel',
+            'DT Soprano',
+            'DT Alto',
+            'DT tenor',
+            'DT basse',
+            'Instrumentiste',
+        ];
+
+        $orderSql = "FIELD(roles.name, '" . implode("','", $roleOrder) . "')";
+
+        $instrumentists = Instrumentist::query()
+            ->with(['instruments', 'role'])
+            ->leftJoin('roles', 'roles.id', '=', 'instrumentists.role_id')
+            ->select('instrumentists.*')
+            ->when($q, function ($query) use ($q) {
+                $query->where(function ($sub) use ($q) {
+                    $sub->where('instrumentists.first_name', 'like', "%$q%")
+                        ->orWhere('instrumentists.last_name', 'like', "%$q%")
+                        ->orWhere('instrumentists.nickname', 'like', "%$q%")
+                        ->orWhere('instrumentists.phone', 'like', "%$q%")
+                        ->orWhere('roles.name', 'like', "%$q%");
+                })
+                ->orWhereHas('instruments', function ($iq) use ($q) {
+                    $iq->where('name', 'like', "%$q%")
+                       ->orWhere('category', 'like', "%$q%");
+                });
             })
-            ->orWhereHas('instruments', function ($iq) use ($q) {
-                $iq->where('name', 'like', "%$q%")
-                   ->orWhere('category', 'like', "%$q%");
-            });
-        })
-        ->orderByRaw($orderSql)
-        ->orderBy('instrumentists.last_name')
-        ->orderBy('instrumentists.first_name')
-        ->paginate(12)
-        ->withQueryString();
+            ->when($roleFilter, function ($query) use ($roleFilter) {
+                $query->where('role_id', $roleFilter);
+            })
+            ->when($sexFilter, function ($query) use ($sexFilter) {
+                $query->where('sex', $sexFilter);
+            })
+            ->when($instrumentFilter, function ($query) use ($instrumentFilter) {
+                $query->whereHas('instruments', function ($q) use ($instrumentFilter) {
+                    $q->where('instrument_id', $instrumentFilter);
+                });
+            })
+            ->orderByRaw($orderSql)
+            ->orderBy('instrumentists.last_name')
+            ->orderBy('instrumentists.first_name')
+            ->paginate($perPage)
+            ->withQueryString();
 
-    // Calcul des KPI
-    $leadershipRoles = ['Président', 'DT principal', 'DT Adjoint', 'Organisateur', 'Secretaire', 'trésoriere', 'chargé spirituel'];
-    $leadershipCount = Instrumentist::whereHas('role', function($q) use ($leadershipRoles) {
-        $q->whereIn('name', $leadershipRoles);
-    })->count();
+        // Calcul des KPI
+        $leadershipRoles = [
+            'Président', 'DT principal', 'DT Adjoint', 'Organisateur', 
+            'Secretaire', 'trésoriere', 'chargé spirituel', 'Conseiller'
+        ];
+        
+        $leadershipCount = Instrumentist::whereHas('role', function($q) use ($leadershipRoles) {
+            $q->whereIn('name', $leadershipRoles);
+        })->count();
 
-    $newMembersThisMonth = Instrumentist::whereMonth('created_at', now()->month)
-        ->whereYear('created_at', now()->year)
-        ->count();
+        $newMembersThisMonth = Instrumentist::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
 
-    return view('instrumentists.index', array_merge([
-        'instrumentists' => $instrumentists,
-        'q' => $q,
-        'totalMembers' => Instrumentist::count(),
-        'leadershipCount' => $leadershipCount,
-        'uniqueInstruments' => Instrument::distinct('name')->count(),
-        'newMembersThisMonth' => $newMembersThisMonth,
-    ]));
-}
+        $femaleCount = Instrumentist::where('sex', 'F')->count();
+        $maleCount = Instrumentist::where('sex', 'M')->count();
+        $totalMembers = Instrumentist::count();
 
+        // Statistiques par catégorie d'instrument
+        $sopranoCount = $this->countByInstrumentCategory('Soprano');
+        $altoCount = $this->countByInstrumentCategory('Alto');
+        $tenorCount = $this->countByInstrumentCategory('Ténor');
+        $bassCount = $this->countByInstrumentCategory('Basse');
 
-public function create()
-{
-    return view('instrumentists.create', [
-        'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
-        'roles' => Role::orderBy('name')->get(),
-    ]);
-}
+        return view('instrumentists.index', [
+            'instrumentists' => $instrumentists,
+            'q' => $q,
+            'totalMembers' => $totalMembers,
+            'leadershipCount' => $leadershipCount,
+            'newMembersThisMonth' => $newMembersThisMonth,
+            'femaleCount' => $femaleCount,
+            'maleCount' => $maleCount,
+            'sopranoCount' => $sopranoCount,
+            'altoCount' => $altoCount,
+            'tenorCount' => $tenorCount,
+            'bassCount' => $bassCount,
+            'roles' => Role::orderBy('name')->get(),
+            'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
+        ]);
+    }
 
+    private function countByInstrumentCategory($category)
+    {
+        return Instrumentist::whereHas('instruments', function ($query) use ($category) {
+            $query->where('category', $category);
+        })->count();
+    }
+
+    public function create()
+    {
+        return view('instrumentists.create', [
+            'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
+            'roles' => Role::orderBy('name')->get(),
+        ]);
+    }
 
     public function store(Request $request)
     {
@@ -111,13 +154,10 @@ public function create()
             'birth_date' => ['required', 'date'],
             'residence' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:30'],
-'role_id' => ['required','integer','exists:roles,id'],
-
-            // ✅ multiple instruments
+            'email' => ['nullable', 'email', 'max:100'],
+            'role_id' => ['required','integer','exists:roles,id'],
             'instrument_ids' => ['required', 'array', 'min:1', 'max:10'],
             'instrument_ids.*' => ['integer', 'exists:instruments,id'],
-
-            // ✅ principal
             'primary_instrument_id' => ['required', 'integer', 'exists:instruments,id'],
         ]);
 
@@ -154,18 +194,16 @@ public function create()
         return view('instrumentists.show', compact('instrumentist'));
     }
 
-public function edit(Instrumentist $instrumentist)
-{
-    $instrumentist->load('instruments','role');
+    public function edit(Instrumentist $instrumentist)
+    {
+        $instrumentist->load('instruments','role');
 
-    return view('instrumentists.edit', [
-        'instrumentist' => $instrumentist,
-        'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
-        'roles' => \App\Models\Role::orderBy('name')->get(),
-    ]);
-}
-
-
+        return view('instrumentists.edit', [
+            'instrumentist' => $instrumentist,
+            'instruments' => Instrument::orderBy('category')->orderBy('name')->get(),
+            'roles' => Role::orderBy('name')->get(),
+        ]);
+    }
 
     public function update(Request $request, Instrumentist $instrumentist)
     {
@@ -178,17 +216,13 @@ public function edit(Instrumentist $instrumentist)
             'birth_date' => ['required', 'date'],
             'residence' => ['required', 'string', 'max:150'],
             'phone' => ['required', 'string', 'max:30'],
-'role_id' => ['required','integer','exists:roles,id'],
-
-            // ✅ multiple instruments
+            'email' => ['nullable', 'email', 'max:100'],
+            'role_id' => ['required','integer','exists:roles,id'],
             'instrument_ids' => ['required', 'array', 'min:1', 'max:10'],
             'instrument_ids.*' => ['integer', 'exists:instruments,id'],
-
-            // ✅ principal
             'primary_instrument_id' => ['required', 'integer', 'exists:instruments,id'],
         ]);
 
-        // ✅ upload photo (photo_path souligné venait souvent de $photoPath manquant)
         if ($request->hasFile('photo')) {
             if ($instrumentist->photo_path) {
                 Storage::disk('public')->delete($instrumentist->photo_path);
@@ -196,13 +230,10 @@ public function edit(Instrumentist $instrumentist)
             $instrumentist->photo_path = $request->file('photo')->store('instrumentists', 'public');
         }
 
-        // ✅ update fields (sans photo + instruments)
         $instrumentist->fill(
-  collect($data)->except(['photo','instrument_ids','primary_instrument_id'])->all()
-)->save();
+            collect($data)->except(['photo','instrument_ids','primary_instrument_id'])->all()
+        )->save();
 
-
-        // ✅ sync instruments
         $ids = $data['instrument_ids'];
         $primary = (int) $data['primary_instrument_id'];
 

@@ -89,6 +89,7 @@
     'secretaire' => 'bg-orange-600 text-white',
     'tresoriere' => 'bg-green-600 text-white',
     'charge spirituel' => 'bg-rose-600 text-white',
+    'conseiler' => 'bg-purple-600 text-white',
   ];
 
   $badgeClass = $roleColors[$key] ?? 'bg-gray-600 text-white';

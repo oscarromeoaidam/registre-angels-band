@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\InstrumentistController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/', fn () => redirect()->route('instrumentists.index'));
 
@@ -16,6 +17,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/instrumentists/{instrumentist}', [InstrumentistController::class, 'update'])->name('instrumentists.update');
     Route::delete('/instrumentists/{instrumentist}', [InstrumentistController::class, 'destroy'])->name('instrumentists.destroy');
 });
+
+// ✅ Export accessible à tous (ou seulement aux admins si vous préférez)
+Route::get('/instrumentists/export', [ExportController::class, 'exportInstrumentists'])
+    ->name('instrumentists.export');
 
 // ✅ PUBLIC (lecture seule)
 Route::get('/instrumentists', [InstrumentistController::class, 'index'])->name('instrumentists.index');
