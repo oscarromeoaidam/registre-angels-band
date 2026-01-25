@@ -32,7 +32,7 @@ class InstrumentistController extends Controller
         $roleFilter = $request->input('role');
         $sexFilter = $request->input('sex');
         $instrumentFilter = $request->input('instrument');
-        $perPage = $request->input('per_page', 25);
+        $perPage = $request->input('per_page', 15);
 
         // Ordre souhaité des rôles
         $roleOrder = [

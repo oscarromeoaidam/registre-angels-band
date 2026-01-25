@@ -1,6 +1,5 @@
 <x-layouts.app>
 
-@section('content')
   {{-- Section Hero avec titre élégant --}}
   <div class="mb-8">
     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Régistre Orchestral</h1>
@@ -54,19 +53,19 @@
     <div class="bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 rounded-2xl shadow-xl p-6 text-white transform hover:scale-[1.02] transition-all duration-300">
       <div class="flex items-start justify-between">
         <div>
-          <p class="text-sm opacity-90 mb-2 font-light">Nouveaux ce mois</p>
-          <p class="text-3xl font-bold mt-1">{{ $newMembersThisMonth ?? 0 }}</p>
+          <p class="text-sm opacity-90 mb-2 font-light">Partitions</p>
+          <p class="text-3xl font-bold mt-1">{{ $totalSheets ?? App\Models\Partition::count() }}</p>
         </div>
         <div class="bg-white/20 p-3 rounded-xl backdrop-blur-sm">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
           </svg>
         </div>
       </div>
       <div class="mt-4 pt-4 border-t border-white/20">
         <div class="text-xs opacity-80 flex items-center gap-1">
-          <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
-          <span>Dernier mois</span>
+          <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+          <span>Répertoire musical</span>
         </div>
       </div>
     </div>
@@ -148,31 +147,6 @@
           </div>
         </form>
 
-        {{-- Bouton Ajouter --}}
-        @if(auth()->check() && auth()->user()->is_admin)
-          <a href="{{ route('instrumentists.create') }}" 
-             class="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap font-medium group">
-            <svg class="w-5 h-5 group-hover:rotate-90 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Ajouter un membre
-          </a>
-        @endif
-        
-        {{-- Connexion / Déconnexion --}}
-        @auth
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="px-4 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-medium text-gray-700">
-              Déconnexion
-            </button>
-          </form>
-        @else
-          <a href="{{ route('login') }}" class="px-4 py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 font-medium text-gray-700">
-            Connexion admin
-          </a>
-        @endauth
-
       </div>
     </div>
   </div>
@@ -187,9 +161,8 @@
           
           <div class="relative">
             <select class="appearance-none pl-4 pr-8 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
-              <option>25 par page</option>
-              <option>50 par page</option>
-              <option>100 par page</option>
+              <option>15 par page</option>
+              
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -442,8 +415,8 @@ $roleColors = [
         <div class="flex items-center gap-2">
           <span class="text-sm text-gray-600">Lignes par page:</span>
           <select class="text-sm px-3 py-1.5 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
-            <option>10</option>
-            <option selected>25</option>
+            <option selected>15</option>
+            <option >25</option>
             <option>50</option>
             <option>100</option>
           </select>

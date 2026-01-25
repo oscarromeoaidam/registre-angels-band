@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
-        if (!Auth::check() || !Auth::user()?->is_admin) {
-            abort(403);
+        if (!Auth::check() || !Auth::user()->is_admin) {
+            abort(403, 'Accès non autorisé. Administrateur requis.');
         }
-
+        
         return $next($request);
     }
 }
