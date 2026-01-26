@@ -7,22 +7,18 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-  public function up(): void
+public function up(): void
 {
     Schema::table('instrumentists', function (Blueprint $table) {
-        $table->foreignId('role_id')
-              ->nullable()
-              ->constrained()
-              ->nullOnDelete();
+        $table->unsignedBigInteger('role_id')->nullable();
     });
 }
-
 public function down(): void
 {
     Schema::table('instrumentists', function (Blueprint $table) {
-        $table->dropForeign(['role_id']);
         $table->dropColumn('role_id');
     });
 }
+
 
 };
