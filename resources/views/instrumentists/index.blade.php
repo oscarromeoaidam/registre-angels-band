@@ -86,7 +86,7 @@
       <div class="mt-4 pt-4 border-t border-white/20">
         <div class="text-xs opacity-80 flex items-center gap-1">
           <span class="w-2 h-2 bg-pink-400 rounded-full"></span>
-          <span>{{ round(($femaleCount ?? 0) / ($totalMembers ?? 1) * 100, 1) }}% de l'effectif</span>
+          <span>{{ round(($femaleCount ?? 0) / ($totalMembers ?: 1) * 100, 1) }}% de l'effectif</span>
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@
       <div class="mt-4 pt-4 border-t border-white/20">
         <div class="text-xs opacity-80 flex items-center gap-1">
           <span class="w-2 h-2 bg-cyan-400 rounded-full"></span>
-          <span>{{ round(($maleCount ?? 0) / ($totalMembers ?? 1) * 100, 1) }}% de l'effectif</span>
+          <span>{{ round(($maleCount ?? 0) / ($totalMembers ?: 1) * 100, 1) }}% de l'effectif</span>
         </div>
       </div>
     </div>
