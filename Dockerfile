@@ -4,10 +4,11 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpq-dev \
+    default-mysql-client \
     zip \
     unzip
 
-RUN docker-php-ext-install pdo pdo_pgsql
+RUN docker-php-ext-install pdo pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -24,5 +25,5 @@ EXPOSE 10000
 
 CMD php artisan config:cache && \
     php artisan route:cache && \
-    php artisan migrate:fresh --force && \
+    php artisan migrate --force && \
     php artisan serve --host=0.0.0.0 --port=$PORT
