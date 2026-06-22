@@ -251,7 +251,7 @@ $roleColors = [
                   @if($m->photo_path)
                     <div class="relative">
                       <img class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow-md"
-                           src="{{ asset('storage/'.$m->photo_path) }}" alt="photo">
+                           src="{{ $m->photo_path }}" alt="photo">
                       <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white 
                         {{ $m->sex == 'M' ? 'bg-blue-400' : 'bg-pink-400' }}">
                       </div>
