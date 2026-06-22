@@ -21,15 +21,15 @@ class ExportController extends Controller
             ->select('instrumentists.*')
             ->when($q, function ($query) use ($q) {
                 $query->where(function ($sub) use ($q) {
-                    $sub->where('instrumentists.first_name', 'like', "%$q%")
-                        ->orWhere('instrumentists.last_name', 'like', "%$q%")
-                        ->orWhere('instrumentists.nickname', 'like', "%$q%")
-                        ->orWhere('instrumentists.phone', 'like', "%$q%")
-                        ->orWhere('roles.name', 'like', "%$q%");
+                    $sub->where('instrumentists.first_name', 'ilike', "%$q%")
+                        ->orWhere('instrumentists.last_name', 'ilike', "%$q%")
+                        ->orWhere('instrumentists.nickname', 'ilike', "%$q%")
+                        ->orWhere('instrumentists.phone', 'ilike', "%$q%")
+                        ->orWhere('roles.name', 'ilike', "%$q%");
                 })
                 ->orWhereHas('instruments', function ($iq) use ($q) {
-                    $iq->where('name', 'like', "%$q%")
-                       ->orWhere('category', 'like', "%$q%");
+                    $iq->where('name', 'ilike', "%$q%")
+                       ->orWhere('category', 'ilike', "%$q%");
                 });
             })
             ->when($roleFilter, function ($query) use ($roleFilter) {
