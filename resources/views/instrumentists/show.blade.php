@@ -11,7 +11,7 @@
 @if($instrumentist->photo_path)
   <img
     class="w-32 h-32 rounded-xl object-cover border"
-    src="{{ asset('storage/'.$instrumentist->photo_path) }}"
+    src="{{ $instrumentist->photo_path }}"
     alt="photo"
   >
 @else
