@@ -169,7 +169,8 @@ class InstrumentistController extends Controller
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('instrumentists', 'public');
+            $cloudinaryPath = $request->file('photo')->store('instrumentists', 'cloudinary');
+            $photoPath = Storage::disk('cloudinary')->url($cloudinaryPath);
         }
 
         $instrumentist = Instrumentist::create([
@@ -231,9 +232,13 @@ class InstrumentistController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($instrumentist->photo_path) {
-                Storage::disk('public')->delete($instrumentist->photo_path);
+                $oldPublicId = $this->extractCloudinaryPublicId($instrumentist->photo_path);
+                if ($oldPublicId) {
+                    Storage::disk('cloudinary')->delete($oldPublicId);
+                }
             }
-            $instrumentist->photo_path = $request->file('photo')->store('instrumentists', 'public');
+            $cloudinaryPath = $request->file('photo')->store('instrumentists', 'cloudinary');
+            $instrumentist->photo_path = Storage::disk('cloudinary')->url($cloudinaryPath);
         }
 
         $instrumentist->fill(
@@ -260,11 +265,29 @@ class InstrumentistController extends Controller
     public function destroy(Instrumentist $instrumentist)
     {
         if ($instrumentist->photo_path) {
-            Storage::disk('public')->delete($instrumentist->photo_path);
+            $publicId = $this->extractCloudinaryPublicId($instrumentist->photo_path);
+            if ($publicId) {
+                Storage::disk('cloudinary')->delete($publicId);
+            }
         }
 
         $instrumentist->delete();
 
         return redirect()->route('instrumentists.index')->with('success', 'Instrumentiste supprimé.');
+    }
+
+    /**
+     * Extrait le public_id Cloudinary (ex: "instrumentists/abc123") a partir
+     * d'une URL Cloudinary complete, afin de pouvoir supprimer le fichier.
+     */
+    private function extractCloudinaryPublicId(string $url): ?string
+    {
+        // Exemple d'URL Cloudinary :
+        // https://res.cloudinary.com/<cloud_name>/image/upload/v1234567890/instrumentists/abc123.jpg
+        if (!preg_match('#/upload/(?:v\d+/)?(.+?)\.[a-zA-Z0-9]+$#', $url, $matches)) {
+            return null;
+        }
+
+        return $matches[1] ?? null;
     }
 }
