@@ -11,7 +11,7 @@
 
       <div class="md:col-span-2 flex items-center gap-4">
         <img class="w-20 h-20 rounded-xl object-cover border"
-             src="{{ $instrumentist->photo_path ? asset('storage/'.$instrumentist->photo_path) : 'https://via.placeholder.com/100' }}"
+             src="{{ $instrumentist->photo_path ?: 'https://via.placeholder.com/100' }}"
              alt="photo">
         <div class="flex-1">
           <label class="block text-sm font-medium mb-1">Changer la photo</label>
