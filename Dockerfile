@@ -17,7 +17,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer update --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs storage/app/public bootstrap/cache
 RUN chmod -R 775 storage bootstrap/cache
