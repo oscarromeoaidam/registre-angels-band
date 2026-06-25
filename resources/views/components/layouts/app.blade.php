@@ -109,11 +109,8 @@
             </div>
           </div>
           <div>
-            <h1 class="text-3xl font-bold logo-text">Fanfare Angel's Band</h1>
-            <p class="text-gray-600 mt-1 flex items-center gap-2">
-              <i class="fas fa-gem text-xs text-purple-500"></i>
-              <span class="text-sm font-medium">Registre des talents musicaux</span>
-            </p>
+            <h1 class="text-3xl font-bold logo-text">Angel's Registry</h1>
+            
           </div>
         </div>
 
@@ -339,7 +336,7 @@
           <div class="flex items-center gap-2 text-xs text-gray-400">
             <span>Développé avec</span>
             <i class="fas fa-heart text-red-400 animate-pulse"></i>
-            <span>par AÏDAM - AMANA</span>
+            <span>par AÏDAM Oscar Roméo</span>
           </div>
           <div class="flex items-center gap-4 text-xs text-gray-500">
             <a href="#" class="hover:text-indigo-600 transition-colors">Mentions légales</a>
