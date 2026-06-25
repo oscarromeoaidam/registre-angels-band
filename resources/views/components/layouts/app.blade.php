@@ -250,18 +250,6 @@
               <div>
                 <h3 class="font-bold text-lg logo-text">Fanfare Angel's Band</h3>
               </div>
-                </div>
-            <p class="text-sm text-gray-600 leading-relaxed">
-              Le registre officiel de la fanfare Angel's Band. 
-              Gérez vos membres et partitions en toute simplicité.
-            </p>
-            <div class="flex items-center gap-3 text-xs text-gray-400">
-              <i class="fas fa-circle text-[5px] text-emerald-400"></i>
-              <span>En ligne</span>
-              <span class="w-px h-4 bg-gray-200"></span>
-              <i class="fas fa-database text-indigo-400"></i>
-              <span>Base de données sécurisée</span>
-            </div>
             </div>
             
           </div>
