@@ -121,7 +121,7 @@
             <a href="{{ route('instrumentists.index') }}" 
                class="nav-link px-5 py-3 rounded-lg flex items-center gap-2 font-medium text-gray-700 hover:text-indigo-700 hover:bg-white">
               <i class="fas fa-users text-indigo-500"></i>
-              <span>Musiciens/nes</span>
+              <span>Membres</span>
             </a>
             
             <div class="h-6 w-px bg-gray-200"></div>
@@ -251,10 +251,6 @@
                 <h3 class="font-bold text-lg logo-text">Fanfare Angel's Band</h3>
               </div>
             </div>
-            <p class="text-sm text-gray-600 leading-relaxed">
-              Plateforme de gestion des talents musicaux. 
-              Votre registre digital pour organiser partitions et musiciens avec passion.
-            </p>
             
           </div>
 
@@ -269,13 +265,13 @@
                 <a href="{{ route('instrumentists.index') }}" 
                    class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center gap-2 group">
                   <i class="fas fa-users text-xs group-hover:translate-x-1 transition-transform"></i>
-                  <span class="text-sm">Musiciens & Musiciennes</span>
+                  <span class="text-sm">Membres</span>
                 </a>
               </li>
               <li>
                 <a href="{{ route('partitions.index') }}" 
                    class="text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2 group">
-                  <i class="fas fa-file-music text-xs group-hover:translate-x-1 transition-transform"></i>
+                  <i class="fas fa-file-book text-xs group-hover:translate-x-1 transition-transform"></i>
                   <span class="text-sm">Bibliothèque de partitions</span>
                 </a>
               </li>
@@ -296,7 +292,6 @@
           <!-- Section Communauté -->
           <div>
             <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-heart text-pink-500 text-sm"></i>
               Rejoignez la communauté
             </h4>
             <p class="text-sm text-gray-600 mb-4">Suivez-nous sur nos réseaux sociaux pour ne rien manquer !</p>
