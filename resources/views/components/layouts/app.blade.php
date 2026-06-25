@@ -329,9 +329,8 @@
             © {{ date('Y') }} Angel's Band. Tous droits réservés.
           </p>
           <div class="flex items-center gap-2 text-xs text-gray-400">
-            <span>Développé avec</span>
-            <i class="fas fa-heart text-red-400 animate-pulse"></i>
-            <span>par AÏDAM Oscar Roméo</span>
+         
+            <span>Développé par AÏDAM Oscar Roméo</span>
           </div>
           <div class="flex items-center gap-4 text-xs text-gray-500">
             <a href="#" class="hover:text-indigo-600 transition-colors">Mentions légales</a>
