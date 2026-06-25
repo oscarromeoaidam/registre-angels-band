@@ -254,40 +254,52 @@
             
           </div>
 
-          <!-- Section Navigation rapide -->
+         <!-- Section Navigation rapide -->
           <div>
-            <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <i class="fas fa-compass text-indigo-500 text-sm"></i>
-              Navigation rapide
+            <h4 class="font-semibold text-gray-800 mb-5 flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                <i class="fas fa-compass text-indigo-500 text-sm"></i>
+              </span>
+              Navigation
             </h4>
-            <ul class="space-y-3">
+            <ul class="space-y-3.5">
               <li>
                 <a href="{{ route('instrumentists.index') }}" 
-                   class="text-gray-600 hover:text-indigo-600 transition-colors flex items-center gap-2 group">
-                  <i class="fas fa-users text-xs group-hover:translate-x-1 transition-transform"></i>
-                  <span class="text-sm">Membres</span>
+                   class="text-gray-600 hover:text-indigo-600 transition-all duration-300 flex items-center gap-3 group">
+                  <span class="w-7 h-7 rounded-lg bg-gray-100/80 group-hover:bg-indigo-100/80 flex items-center justify-center transition-colors">
+                    <i class="fas fa-users text-xs text-gray-500 group-hover:text-indigo-600 transition-colors"></i>
+                  </span>
+                  <span class="text-sm font-medium">Membres</span>
+                  <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0"></i>
                 </a>
               </li>
               <li>
                 <a href="{{ route('partitions.index') }}" 
-                   class="text-gray-600 hover:text-purple-600 transition-colors flex items-center gap-2 group">
-                  <i class="fas fa-file-book text-xs group-hover:translate-x-1 transition-transform"></i>
-                  <span class="text-sm">Bibliothèque de partitions</span>
+                   class="text-gray-600 hover:text-purple-600 transition-all duration-300 flex items-center gap-3 group">
+                  <span class="w-7 h-7 rounded-lg bg-gray-100/80 group-hover:bg-purple-100/80 flex items-center justify-center transition-colors">
+                    <i class="fas fa-file-music text-xs text-gray-500 group-hover:text-purple-600 transition-colors"></i>
+                  </span>
+                  <span class="text-sm font-medium">Bibliothèque de partitions</span>
+                  <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0"></i>
                 </a>
               </li>
               @auth
                 @if(auth()->user()->is_admin)
                   <li>
                     <a href="{{ route('partitions.create') }}" 
-                       class="text-gray-600 hover:text-green-600 transition-colors flex items-center gap-2 group">
-                      <i class="fas fa-cog text-xs group-hover:rotate-90 transition-transform"></i>
-                      <span class="text-sm">Panneau d'administration</span>
+                       class="text-gray-600 hover:text-emerald-600 transition-all duration-300 flex items-center gap-3 group">
+                      <span class="w-7 h-7 rounded-lg bg-gray-100/80 group-hover:bg-emerald-100/80 flex items-center justify-center transition-colors">
+                        <i class="fas fa-cog text-xs text-gray-500 group-hover:text-emerald-600 transition-colors"></i>
+                      </span>
+                      <span class="text-sm font-medium">Administration</span>
+                      <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0"></i>
                     </a>
                   </li>
                 @endif
               @endauth
             </ul>
           </div>
+
 
           <!-- Section Communauté -->
           <div>
