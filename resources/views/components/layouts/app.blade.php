@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ $title ?? "Angel's Band — Registre" }}</title>
+  
+  <!-- Favicon -->
+<link rel="icon" type="image/png" href="{{ asset('images/FAB.png') }}">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
@@ -90,6 +94,32 @@
       50% { opacity: 0.5; }
       100% { opacity: 1; }
     }
+
+    /* Animation d'apparition corrigée */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Style pour l'icône des partitions */
+    .fa-file-music {
+      font-size: 0.875rem; /* 14px */
+    }
+
+    /* Correction du style des liens de navigation */
+    .nav-link i {
+      font-size: 0.875rem;
+    }
   </style>
 </head>
 <body class="text-gray-800">
@@ -120,7 +150,7 @@
           <div class="flex items-center gap-3 bg-white/50 rounded-xl p-2">
             <a href="{{ route('instrumentists.index') }}" 
                class="nav-link px-5 py-3 rounded-lg flex items-center gap-2 font-medium text-gray-700 hover:text-indigo-700 hover:bg-white">
-              <i class="fas fa-users text-indigo-500"></i>
+              <i class="fas fa-users"></i>
               <span>Membres</span>
             </a>
             
@@ -128,7 +158,7 @@
             
             <a href="{{ route('partitions.index') }}" 
                class="nav-link px-5 py-3 rounded-lg flex items-center gap-2 font-medium text-gray-700 hover:text-purple-700 hover:bg-white">
-                <i class="fas fa-file-music text-purple-500 text-sm"></i>
+              <i class="fas fa-file-music"></i>
               <span>Partitions</span>
             </a>
           </div>
@@ -233,7 +263,6 @@
     </main>
 
     <!-- Pied de page -->
-    <!-- Pied de page -->
     <footer class="mt-12">
       <div class="glass-effect rounded-2xl shadow-xl p-8 overflow-hidden relative">
         <!-- Décoration d'arrière-plan -->
@@ -254,7 +283,7 @@
             
           </div>
 
-         <!-- Section Navigation rapide -->
+          <!-- Section Navigation rapide -->
           <div>
             <h4 class="font-semibold text-gray-800 mb-5 flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
@@ -300,10 +329,10 @@
             </ul>
           </div>
 
-
           <!-- Section Communauté -->
           <div>
             <h4 class="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="fas fa-share-nodes text-pink-500 text-sm"></i>
               Rejoignez la communauté
             </h4>
             <p class="text-sm text-gray-600 mb-4">Suivez-nous sur nos réseaux sociaux pour ne rien manquer !</p>
@@ -368,7 +397,7 @@
   </div>
 
   <script>
-    // Animation des éléments au scroll
+    // Animation des éléments au scroll - version corrigée
     document.addEventListener('DOMContentLoaded', function() {
       const observerOptions = {
         threshold: 0.1,
@@ -384,11 +413,10 @@
       }, observerOptions);
 
       // Observer les cartes et sections
-      document.querySelectorAll('.card-hover, .nav-link').forEach(el => {
+      document.querySelectorAll('.card-hover, .glass-effect, .nav-link').forEach(el => {
         observer.observe(el);
       });
     });
   </script>
 </body>
 </html>
-
