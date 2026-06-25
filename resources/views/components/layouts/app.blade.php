@@ -324,18 +324,24 @@
         </div>
 
         <!-- Bas du footer -->
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-5 pt-2">
           <p class="text-sm text-gray-500 text-center md:text-left">
-            © {{ date('Y') }} Angel's Band. Tous droits réservés.
+            © {{ date('Y') }} <span class="font-semibold text-indigo-600">Angel's Band</span>. Tous droits réservés.
           </p>
-          <div class="flex items-center gap-2 text-xs text-gray-400">
-         
-            <span>Développé par AÏDAM Oscar Roméo</span>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-gray-400">Développé par</span>
+            <span class="font-medium text-gray-700 bg-gradient-to-r from-indigo-100 to-purple-100 px-3 py-1.5 rounded-xl">AÏDAM Oscar Roméo</span>
           </div>
           <div class="flex items-center gap-4 text-xs text-gray-500">
-            <a href="#" class="hover:text-indigo-600 transition-colors">Mentions légales</a>
+            <a href="#" class="hover:text-indigo-600 transition-colors duration-300 flex items-center gap-1.5">
+              <i class="fas fa-scale-balanced text-[10px]"></i>
+              Mentions légales
+            </a>
             <span class="text-gray-300">•</span>
-            <a href="#" class="hover:text-indigo-600 transition-colors">Confidentialité</a>
+            <a href="#" class="hover:text-indigo-600 transition-colors duration-300 flex items-center gap-1.5">
+              <i class="fas fa-shield-halved text-[10px]"></i>
+              Confidentialité
+            </a>
           </div>
         </div>
       </div>
