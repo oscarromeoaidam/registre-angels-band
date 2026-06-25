@@ -128,7 +128,7 @@
             
             <a href="{{ route('partitions.index') }}" 
                class="nav-link px-5 py-3 rounded-lg flex items-center gap-2 font-medium text-gray-700 hover:text-purple-700 hover:bg-white">
-              <i class="fas fa-file-music text-purple-500"></i>
+                <i class="fas fa-file-music text-purple-500 text-sm"></i>
               <span>Partitions</span>
             </a>
           </div>
