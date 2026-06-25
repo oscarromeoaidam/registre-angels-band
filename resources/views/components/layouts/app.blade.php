@@ -6,7 +6,8 @@
   <title>{{ $title ?? "Angel's Band — Registre" }}</title>
   
   <!-- Favicon -->
-<link rel="icon" type="image/png" href="{{ asset('images/FAB.png') }}">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -111,14 +112,10 @@
       animation: fadeInUp 0.6s ease-out forwards;
     }
 
-    /* Style pour l'icône des partitions */
+    /* Correction des icônes Font Awesome */
     .fa-file-music {
-      font-size: 0.875rem; /* 14px */
-    }
-
-    /* Correction du style des liens de navigation */
-    .nav-link i {
-      font-size: 0.875rem;
+      /* Font Awesome n'a pas d'icône "file-music" native */
+      /* On utilise fa-music à la place */
     }
   </style>
 </head>
@@ -158,7 +155,7 @@
             
             <a href="{{ route('partitions.index') }}" 
                class="nav-link px-5 py-3 rounded-lg flex items-center gap-2 font-medium text-gray-700 hover:text-purple-700 hover:bg-white">
-              <i class="fas fa-file-music"></i>
+              <i class="fas fa-music"></i>
               <span>Partitions</span>
             </a>
           </div>
@@ -306,7 +303,7 @@
                 <a href="{{ route('partitions.index') }}" 
                    class="text-gray-600 hover:text-purple-600 transition-all duration-300 flex items-center gap-3 group">
                   <span class="w-7 h-7 rounded-lg bg-gray-100/80 group-hover:bg-purple-100/80 flex items-center justify-center transition-colors">
-                    <i class="fas fa-file-music text-xs text-gray-500 group-hover:text-purple-600 transition-colors"></i>
+                    <i class="fas fa-music text-xs text-gray-500 group-hover:text-purple-600 transition-colors"></i>
                   </span>
                   <span class="text-sm font-medium">Bibliothèque de partitions</span>
                   <i class="fas fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-all duration-300 -translate-x-2 group-hover:translate-x-0"></i>
