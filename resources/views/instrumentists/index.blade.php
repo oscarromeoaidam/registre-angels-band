@@ -2,7 +2,7 @@
 
   {{-- Section Hero avec titre élégant --}}
   <div class="mb-8">
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Régistre Orchestral</h1>
+    
     <p class="text-gray-600">Fanfare Angel's band</p>
     <div class="h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-4"></div>
   </div>
