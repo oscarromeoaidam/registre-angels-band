@@ -22,3 +22,13 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Fichiers de test / artefacts locaux WAMP (a ne jamais pousser sur GitHub)
+/.htaccess
+/info.php
+/Clipboard.txt
+/boost.json
+/config/.htaccess
+/config/.htaccess_test
+/config/info.php
+/config/composer.json

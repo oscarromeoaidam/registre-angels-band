@@ -120,11 +120,11 @@
         <!-- <h2 class="text-xl font-semibold text-gray-800">Liste des Membres</h2>
         <p class="text-sm text-gray-600 mt-1">Gérez tous les membres de l'orchestre</p> -->
       </div>
-      
+
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
         {{-- Filtres rapides --}}
         <div class="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
-          
+
           @foreach(['Président', 'DT ', 'DT Adjoint', 'trésorière', 'Organisateur'] as $filterRole)
             <button onclick="filterByRole('{{ $filterRole }}')" class="px-4 py-2.5 text-sm rounded-lg border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 whitespace-nowrap font-medium text-gray-700">
               {{ $filterRole }}
@@ -176,13 +176,6 @@
               </svg>
               Excel (.xlsx)
             </a>
-            <a href="{{ route('instrumentists.export-pdf', request()->query()) }}"
-               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 text-sm font-medium border-t border-gray-100">
-              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h2m-6 6h6m-6-6V7a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-1"/>
-              </svg>
-              Rapport PDF (.pdf)
-            </a>
           </div>
         </div>
 
@@ -197,11 +190,11 @@
       <div class="flex items-center justify-between">
         <h3 class="font-semibold text-gray-800">Liste des membres</h3>
         <div class="flex items-center gap-3">
-          
+
           <div class="relative">
             <select class="appearance-none pl-4 pr-8 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
               <option>15 par page</option>
-              
+
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -291,7 +284,7 @@ $roleColors = [
                     <div class="relative">
                       <img class="w-12 h-12 rounded-xl object-cover border-2 border-white shadow-md"
                            src="{{ $m->photo_path }}" alt="photo">
-                      <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white 
+                      <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white
                         {{ $m->sex == 'M' ? 'bg-blue-400' : 'bg-pink-400' }}">
                       </div>
                     </div>
@@ -317,7 +310,7 @@ $roleColors = [
                   </div>
                 </a>
               </td>
-              
+
               <td class="p-6">
                 <div class="flex flex-col gap-2">
                   <span class="inline-flex items-center justify-center px-4 py-1.5 rounded-full text-xs font-semibold {{ $badgeClass }} transition-all duration-200 hover:shadow-sm">
@@ -328,7 +321,7 @@ $roleColors = [
                   @endif
                 </div>
               </td>
-              
+
               <td class="p-6">
                 @if($displayInstrument)
                   <div class="flex items-center gap-3">
@@ -355,7 +348,7 @@ $roleColors = [
                   <span class="text-gray-400 italic">Aucun instrument</span>
                 @endif
               </td>
-              
+
               <td class="p-6">
                 <div class="space-y-1">
                   <div class="flex items-center gap-2 text-gray-900 font-medium">
@@ -375,7 +368,7 @@ $roleColors = [
                   @endif
                 </div>
               </td>
-              
+
               <td class="p-6">
                 <div class="space-y-1">
                   <div class="text-gray-900 font-medium">{{ $m->residence }}</div>
@@ -384,10 +377,10 @@ $roleColors = [
                   @endif
                 </div>
               </td>
-              
+
               <td class="p-6">
   <div class="flex items-center gap-2">
-    <a href="{{ route('instrumentists.show', $m) }}" 
+    <a href="{{ route('instrumentists.show', $m) }}"
        class="p-2.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200 group/action"
        title="Voir le profil">
       <svg class="w-5 h-5 group-hover/action:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -396,20 +389,20 @@ $roleColors = [
       </svg>
     </a>
     @if(auth()->check() && auth()->user()->is_admin)
-      <a href="{{ route('instrumentists.edit', $m) }}" 
+      <a href="{{ route('instrumentists.edit', $m) }}"
          class="p-2.5 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200 group/action"
          title="Modifier">
         <svg class="w-5 h-5 group-hover/action:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
         </svg>
       </a>
-      
+
       {{-- FORMULAIRE DE SUPPRESSION --}}
-      <form action="{{ route('instrumentists.destroy', $m) }}" method="POST" class="inline" 
+      <form action="{{ route('instrumentists.destroy', $m) }}" method="POST" class="inline"
             onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer {{ $m->first_name }} {{ $m->last_name }} ?')">
         @csrf
         @method('DELETE')
-        <button type="submit" 
+        <button type="submit"
                 class="p-2.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 group/action"
                 title="Supprimer">
           <svg class="w-5 h-5 group-hover/action:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -424,7 +417,7 @@ $roleColors = [
           @endforeach
         </tbody>
       </table>
-      
+
       @if($instrumentists->isEmpty())
         <div class="text-center py-16">
           <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
@@ -434,7 +427,7 @@ $roleColors = [
           </div>
           <h4 class="text-lg font-medium text-gray-700 mb-2">Aucun membre trouvé</h4>
           <p class="text-gray-500 mb-6">Essayez de modifier vos critères de recherche</p>
-          <button onclick="window.location.href='{{ route('instrumentists.create') }}'" 
+          <button onclick="window.location.href='{{ route('instrumentists.create') }}'"
                   class="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium">
             Ajouter le premier membre
           </button>
@@ -446,8 +439,8 @@ $roleColors = [
     <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/30">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="text-sm text-gray-600">
-          Affichage de <span class="font-semibold text-gray-900">{{ $instrumentists->firstItem() ?? 0 }}</span> à 
-          <span class="font-semibold text-gray-900">{{ $instrumentists->lastItem() ?? 0 }}</span> sur 
+          Affichage de <span class="font-semibold text-gray-900">{{ $instrumentists->firstItem() ?? 0 }}</span> à
+          <span class="font-semibold text-gray-900">{{ $instrumentists->lastItem() ?? 0 }}</span> sur
           <span class="font-semibold text-gray-900">{{ $instrumentists->total() }}</span> membres
         </div>
         {{ $instrumentists->links() }}
@@ -509,7 +502,7 @@ $roleColors = [
         menu.classList.add('hidden');
       }
     });
-    
+
     function filterBy(type) {
       console.log('Filtrer par:', type);
     }
@@ -529,7 +522,7 @@ $roleColors = [
 
     // Gestion des sélections multiples
     let selectedMembers = new Set();
-    
+
     function toggleMemberSelection(id) {
       if (selectedMembers.has(id)) {
         selectedMembers.delete(id);
@@ -538,7 +531,7 @@ $roleColors = [
       }
       updateSelectionCounter();
     }
-    
+
     function updateSelectionCounter() {
       const counter = document.getElementById('selection-counter');
       if (counter) {
@@ -562,7 +555,7 @@ $roleColors = [
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    
+
     @media (max-width: 640px) {
       .grid-cols-5 {
         grid-template-columns: 1fr;
@@ -571,33 +564,33 @@ $roleColors = [
         padding: 0.75rem;
       }
     }
-    
+
     /* Animations subtiles */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .animate-fade-in {
       animation: fadeIn 0.3s ease-out;
     }
-    
+
     /* Custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
-    
+
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
       border-radius: 10px;
     }
-    
+
     ::-webkit-scrollbar-thumb {
       background: #888;
       border-radius: 10px;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
       background: #555;
     }
