@@ -62,9 +62,17 @@ class PartitionController extends Controller
     {
         $partition = Partition::findOrFail($id);
 
-        // Le champ "fichier" contient une URL Cloudinary complete.
         if (!$partition->fichier) {
             abort(404, 'Fichier non trouvé');
+        }
+
+        // Compatibilite : les partitions creees avant la migration vers
+        // Cloudinary ont un simple chemin local ("partitions/xxx.pdf") au
+        // lieu d'une URL complete. Ces fichiers ont ete perdus lors des
+        // redeploiements Render (stockage non persistant) et n'existent
+        // plus nulle part -> on l'indique clairement plutot que de planter.
+        if (!str_starts_with($partition->fichier, 'http://') && !str_starts_with($partition->fichier, 'https://')) {
+            abort(404, 'Ce fichier a ete perdu lors d\'une mise a jour du serveur. Merci de le reuploader depuis la page Modifier de cette partition.');
         }
 
         // On recupere le contenu du PDF depuis Cloudinary et on le renvoie
