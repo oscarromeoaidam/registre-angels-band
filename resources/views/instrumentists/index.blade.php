@@ -2,7 +2,7 @@
 
   {{-- Section Hero avec titre élégant --}}
   <div class="mb-8">
-    
+    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Régistre Orchestral</h1>
     <p class="text-gray-600">Fanfare Angel's band</p>
     <div class="h-1 w-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-4"></div>
   </div>
@@ -147,15 +147,44 @@
           </div>
         </form>
 
-        {{-- Export CSV (conserve la recherche/filtres actuels) --}}
-        <a href="{{ route('instrumentists.export', request()->query()) }}"
-           class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 flex items-center gap-2 font-medium text-gray-700 whitespace-nowrap"
-           title="Exporter la liste affichée en CSV">
-          <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
-          </svg>
-          <span>Exporter</span>
-        </a>
+        {{-- Export (conserve la recherche/filtres actuels) --}}
+        <div class="relative">
+          <button onclick="document.getElementById('export-menu').classList.toggle('hidden')" type="button"
+             class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 flex items-center gap-2 font-medium text-gray-700 whitespace-nowrap"
+             title="Exporter la liste affichée">
+            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+            </svg>
+            <span>Exporter</span>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="export-menu"
+               class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-20">
+            <a href="{{ route('instrumentists.export', request()->query()) }}"
+               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 text-sm font-medium">
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h2m-6 6h6m-6-6V7a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-1"/>
+              </svg>
+              CSV (.csv)
+            </a>
+            <a href="{{ route('instrumentists.export-excel', request()->query()) }}"
+               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 text-sm font-medium border-t border-gray-100">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h2m-6 6h6m-6-6V7a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-1"/>
+              </svg>
+              Excel (.xlsx)
+            </a>
+            <a href="{{ route('instrumentists.export-pdf', request()->query()) }}"
+               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 text-sm font-medium border-t border-gray-100">
+              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h2m-6 6h6m-6-6V7a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-1"/>
+              </svg>
+              Rapport PDF (.pdf)
+            </a>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -468,6 +497,18 @@ $roleColors = [
       url.searchParams.set('q', role);
       window.location.href = url.toString();
     }
+
+    // Fermer le menu d'export si on clique en dehors
+    document.addEventListener('click', function (e) {
+      const menu = document.getElementById('export-menu');
+      if (!menu) return;
+      const button = e.target.closest('button');
+      const clickedInsideMenu = menu.contains(e.target);
+      const clickedButton = button && button.getAttribute('onclick') && button.getAttribute('onclick').includes('export-menu');
+      if (!clickedInsideMenu && !clickedButton) {
+        menu.classList.add('hidden');
+      }
+    });
     
     function filterBy(type) {
       console.log('Filtrer par:', type);
