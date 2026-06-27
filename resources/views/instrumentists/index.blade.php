@@ -176,13 +176,6 @@
               </svg>
               Excel (.xlsx)
             </a>
-            <a href="{{ route('instrumentists.export-pdf', request()->query()) }}"
-               class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 text-gray-700 text-sm font-medium border-t border-gray-100">
-              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h2m-6 6h6m-6-6V7a2 2 0 012-2h6l4 4v10a2 2 0 01-2 2H9a2 2 0 01-2-2v-1"/>
-              </svg>
-              Rapport PDF (.pdf)
-            </a>
           </div>
         </div>
 
