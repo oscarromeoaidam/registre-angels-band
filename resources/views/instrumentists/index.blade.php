@@ -147,6 +147,16 @@
           </div>
         </form>
 
+        {{-- Export CSV (conserve la recherche/filtres actuels) --}}
+        <a href="{{ route('instrumentists.export', request()->query()) }}"
+           class="px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 flex items-center gap-2 font-medium text-gray-700 whitespace-nowrap"
+           title="Exporter la liste affichée en CSV">
+          <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/>
+          </svg>
+          <span>Exporter</span>
+        </a>
+
       </div>
     </div>
   </div>
