@@ -58,8 +58,7 @@ class ExportController extends Controller
             // En-têtes CSV
             fputcsv($handle, [
                 'ID', 'Nom', 'Prénom', 'Surnom', 'Sexe', 'Date de naissance',
-                'Téléphone', 'Email', 'Résidence', 'Lieu de naissance', 'Rôle',
-                'Instruments', 'Date d\'adhésion', 'Âge'
+                'Téléphone', 'Résidence', 'Rôle', 'Instruments', 'Âge'
             ]);
             
             // Données
@@ -72,12 +71,9 @@ class ExportController extends Controller
                     $member->sex == 'M' ? 'Homme' : 'Femme',
                     $member->birth_date->format('d/m/Y'),
                     $member->phone,
-                    $member->email ?? '',
                     $member->residence,
-                    $member->birth_place ?? '',
                     $member->role->name ?? 'N/A',
                     $member->instruments->pluck('name')->join(', '),
-                    $member->date_joined?->format('d/m/Y'),
                     $member->age
                 ]);
             }
