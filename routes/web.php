@@ -18,13 +18,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/instrumentists/{instrumentist}/edit', [InstrumentistController::class, 'edit'])->name('instrumentists.edit');
     Route::put('/instrumentists/{instrumentist}', [InstrumentistController::class, 'update'])->name('instrumentists.update');
     Route::delete('/instrumentists/{instrumentist}', [InstrumentistController::class, 'destroy'])->name('instrumentists.destroy');
-    
+
     // ---------- Partitions ----------
     Route::prefix('admin')->group(function () {
         // Création
         Route::get('/partitions/create', [PartitionController::class, 'create'])->name('partitions.create');
         Route::post('/partitions', [PartitionController::class, 'store'])->name('partitions.store');
-        
+
         // Modification et suppression
         Route::get('/partitions/{partition}/edit', [PartitionController::class, 'edit'])->name('partitions.edit');
         Route::put('/partitions/{partition}', [PartitionController::class, 'update'])->name('partitions.update');
@@ -37,6 +37,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 // ---------- Export ----------
 Route::get('/instrumentists/export', [ExportController::class, 'exportInstrumentists'])
     ->name('instrumentists.export');
+Route::get('/instrumentists/export-excel', [ExportController::class, 'exportInstrumentistsExcel'])
+    ->name('instrumentists.export-excel');
+Route::get('/instrumentists/export-pdf', [ExportController::class, 'exportInstrumentistsPdf'])
+    ->name('instrumentists.export-pdf');
 
 // ---------- Instrumentistes (lecture) ----------
 Route::get('/instrumentists', [InstrumentistController::class, 'index'])->name('instrumentists.index');
