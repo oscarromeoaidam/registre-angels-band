@@ -41,19 +41,19 @@ class InstrumentistController extends Controller
             'DT Adjoint',
             'Organisateur',
             'Secretaire',
-            'trésoriere',
+            'Trésoriere',
             'Conseiller',
-            'chargé spirituel',
+            'Chargé spirituel',
             'DT Soprano',
             'DT Alto',
-            'DT tenor',
-            'DT basse',
+            'DT Tenor',
+            'DT Basse',
             'Instrumentiste',
         ];
 
-        $caseSql = "CASE roles.name ";
+        $caseSql = "CASE LOWER(roles.name) ";
         foreach ($roleOrder as $position => $roleName) {
-            $escaped = str_replace("'", "''", $roleName);
+            $escaped = str_replace("'", "''", mb_strtolower($roleName));
             $caseSql .= "WHEN '{$escaped}' THEN {$position} ";
         }
         $caseSql .= "ELSE " . count($roleOrder) . " END";
@@ -95,10 +95,10 @@ class InstrumentistController extends Controller
 
         // Calcul des KPI
         $leadershipRoles = [
-            'Président', 'DT principal', 'DT Adjoint', 'Organisateur', 
+            'Président', 'DT principal', 'DT Adjoint', 'Organisateur',
             'Secretaire', 'trésoriere', 'chargé spirituel', 'Conseiller'
         ];
-        
+
         $leadershipCount = Instrumentist::whereHas('role', function($q) use ($leadershipRoles) {
             $q->whereIn('name', $leadershipRoles);
         })->count();
